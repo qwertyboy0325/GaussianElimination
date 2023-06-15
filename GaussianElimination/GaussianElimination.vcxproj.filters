@@ -15,27 +15,27 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="main\main.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
-    <ClCompile Include="GaussianElimination.cpp">
+    <ClCompile Include="include\GaussianElimination.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
-    <ClCompile Include="ThreadPool.cpp">
+    <ClCompile Include="include\ThreadPool.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
-    <ClCompile Include="Barrier.cpp">
+    <ClCompile Include="include\Barrier.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GaussianElimination.h">
+    <ClInclude Include="include\GaussianElimination.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
-    <ClInclude Include="ThreadPool.h">
+    <ClInclude Include="include\ThreadPool.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
-    <ClInclude Include="Barrier.h">
+    <ClInclude Include="include\Barrier.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
   </ItemGroup>
