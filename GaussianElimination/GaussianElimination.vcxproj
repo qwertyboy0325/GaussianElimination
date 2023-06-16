@@ -141,13 +141,13 @@
   <ItemGroup>
     <ClCompile Include="main\auto_test_main.cpp" />
     <ClCompile Include="main\main.cpp" />
-    <ClCompile Include="include\GaussianElimination.cpp" />
+    <ClCompile Include="include\Matrix.cpp" />
     <ClCompile Include="include\Barrier.cpp" />
     <ClCompile Include="include\ThreadPool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Barrier.h" />
-    <ClInclude Include="include\GaussianElimination.h" />
+    <ClInclude Include="include\Matrix.h" />
     <ClInclude Include="include\ThreadPool.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
