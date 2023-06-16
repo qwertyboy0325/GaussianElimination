@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="main\auto_test_main.cpp" />
     <ClCompile Include="main\main.cpp" />
     <ClCompile Include="include\GaussianElimination.cpp" />
     <ClCompile Include="include\Barrier.cpp" />
