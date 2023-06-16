@@ -13,6 +13,7 @@ public:
 	~ThreadPool();
 	template<class T>
 	void Enqueue(T&&);
+	void WaitAll();
 
 private:
 	std::vector<std::thread> threads;
