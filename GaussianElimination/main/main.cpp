@@ -1,9 +1,14 @@
 ﻿#include <iostream>
 #include <thread>
-#include "GaussianElimination.h"
-#include "ThreadPool.h"
+#include "../include/ThreadPool.h"
+#include "../include/GaussianElimination.h"
 
 int main()
 {
-	ThreadPool threadPools(5);
+	while (1) {
+		size_t dimension = 0;
+		std::cin >> dimension;
+		Matrix matrix(dimension, dimension);
+
+	}
 }
