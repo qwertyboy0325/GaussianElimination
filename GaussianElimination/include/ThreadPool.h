@@ -19,13 +19,14 @@ private:
 	std::vector<std::thread> threads;
 	std::queue<std::function<void()>> tasks;
 	std::mutex queueMutex;
+	std::mutex completedTasksMutex;
 	std::condition_variable condition;
 	int taskCount;
 	size_t submittedTasks;
 	size_t totalTasks;
+	size_t completedTasks;
 	std::condition_variable taskFinishedCondition;
 	bool stop;
-	bool started;
 };
 
 template<class T>
