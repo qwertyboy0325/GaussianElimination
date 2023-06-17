@@ -139,10 +139,10 @@ void MatrixMath::GaussianElimination(Matrix& matrix, int thread_id, Barrier& bar
 		// 將對角線元素調整為 1
 		if (i < cols) {
 			if (thread_id == i % rows) {
-				float diagonal = matrix(i, i);
-				if (diagonal != 0) {
+				float factor = matrix(i, i);
+				if (factor != 0) {
 					for (size_t j = i; j < cols; j++)
-						matrix(i, j) /= diagonal;
+						matrix(i, j) /= factor;
 				}
 			}
 		}
