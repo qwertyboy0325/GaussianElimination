@@ -139,7 +139,7 @@ void MatrixMath::GaussianElimination(Matrix& matrix, int thread_id, Barrier& bar
 		// 將對角線元素調整為 1
 		if (i < cols) {
 			if (thread_id == i % rows) {
-				float factor = matrix(i, i);
+				double factor = matrix(i, i);
 				if (factor != 0) {
 					for (size_t j = i; j < cols; j++)
 						matrix(i, j) /= factor;
@@ -153,7 +153,7 @@ void MatrixMath::GaussianElimination(Matrix& matrix, int thread_id, Barrier& bar
 		// 進行消去操作
 		for (size_t j = 0; j < rows; j++) {
 			if (thread_id == j % rows && j != i && i < cols) {
-				float factor = matrix(j, i);
+				double factor = matrix(j, i);
 				for (size_t k = i; k < cols; k++)
 				{
 					matrix(j, k) -= factor * matrix(i, k);
