@@ -8,24 +8,24 @@
 
 int main()
 {
-	//int num = 0;
-	//std::cin >> num;
+	int num = 0;
+	std::cin >> num;
 	while (true) {
 		int row, col = 0;
 
 		std::random_device rd;
 		std::mt19937 gen(rd());
-		std::uniform_int_distribution<int> dis(100, 200);
+		std::uniform_int_distribution<int> dis(num*0.8f, num);
 
 		row = dis(gen);
 		col = dis(gen);
 		Matrix matrix = MatrixUtility::GenerateRandomMatrix(row, col);
 		//std::cout << "Raw:\n" << matrix << std::endl;
 		size_t threads_num = 0;
-		if (matrix.getRows() >= 10)
+		if (matrix.getRows() < 20)
 			threads_num = matrix.getRows();
 		else
-			threads_num = 1;
+			threads_num = 20;
 		ThreadPool thread_pool(threads_num, threads_num);
 		Barrier barrier(threads_num);
 
