@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\main.cpp">
+    <ClCompile Include="main\main.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
     <ClCompile Include="include\Matrix.cpp">
@@ -27,7 +27,7 @@
     <ClCompile Include="include\Barrier.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
-    <ClCompile Include="src\test\performance_test.cpp">
+    <ClCompile Include="main\auto_test_main.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
   </ItemGroup>
@@ -39,9 +39,6 @@
       <Filter>標頭檔</Filter>
     </ClInclude>
     <ClInclude Include="include\Barrier.h">
-      <Filter>標頭檔</Filter>
-    </ClInclude>
-    <ClInclude Include="src\test\performance_test.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
   </ItemGroup>

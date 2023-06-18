@@ -130,7 +130,7 @@ float MatrixMath::CalculateDeterminant(Matrix& matrix)
 }
 
 
-void MatrixMath::GaussianElimination(Matrix& matrix, size_t thread_id,size_t max_thread_id, Barrier& barrier)
+void MatrixMath::GaussianElimination(Matrix& matrix, int thread_id, Barrier& barrier)
 {
 	const size_t rows = matrix.getRows();
 	const size_t cols = matrix.getCols();
@@ -138,7 +138,7 @@ void MatrixMath::GaussianElimination(Matrix& matrix, size_t thread_id,size_t max
 	for (size_t i = 0; i < rows; i++) {
 		// 將對角線元素調整為 1
 		if (i < cols) {
-			if (thread_id == i % max_thread_id) {
+			if (thread_id == i % rows) {
 				double factor = matrix(i, i);
 				if (factor != 0) {
 					for (size_t j = i; j < cols; j++)
@@ -152,7 +152,7 @@ void MatrixMath::GaussianElimination(Matrix& matrix, size_t thread_id,size_t max
 
 		// 進行消去操作
 		for (size_t j = 0; j < rows; j++) {
-			if (thread_id == j % max_thread_id && j != i && i < cols) {
+			if (thread_id == j % rows && j != i && i < cols) {
 				double factor = matrix(j, i);
 				for (size_t k = i; k < cols; k++)
 				{

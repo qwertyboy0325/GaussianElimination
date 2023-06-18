@@ -19,8 +19,8 @@ Global
 		{A3CFE230-D07A-47B1-B15F-564BB7270BA2}.Debug|x86.Build.0 = Debug|Win32
 		{A3CFE230-D07A-47B1-B15F-564BB7270BA2}.Release|x64.ActiveCfg = Release|x64
 		{A3CFE230-D07A-47B1-B15F-564BB7270BA2}.Release|x64.Build.0 = Release|x64
-		{A3CFE230-D07A-47B1-B15F-564BB7270BA2}.Release|x86.ActiveCfg = Release|x64
-		{A3CFE230-D07A-47B1-B15F-564BB7270BA2}.Release|x86.Build.0 = Release|x64
+		{A3CFE230-D07A-47B1-B15F-564BB7270BA2}.Release|x86.ActiveCfg = Release|Win32
+		{A3CFE230-D07A-47B1-B15F-564BB7270BA2}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
