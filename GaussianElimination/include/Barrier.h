@@ -12,6 +12,7 @@ public:
 private:
     int numThreads;
     int count;
+    size_t phase;
     std::mutex mutex;
     std::condition_variable condition;
 };

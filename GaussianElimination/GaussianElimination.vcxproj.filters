@@ -15,10 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main\main.cpp">
+    <ClCompile Include="src\main.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
-    <ClCompile Include="include\GaussianElimination.cpp">
+    <ClCompile Include="include\Matrix.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
     <ClCompile Include="include\ThreadPool.cpp">
@@ -27,12 +27,18 @@
     <ClCompile Include="include\Barrier.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
-    <ClCompile Include="main\auto_test_main.cpp">
+    <ClCompile Include="src\test\performance_test.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Utility\FilepathTool.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\GaussianElimination.h">
+    <ClInclude Include="include\Matrix.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
     <ClInclude Include="include\ThreadPool.h">
@@ -41,5 +47,17 @@
     <ClInclude Include="include\Barrier.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
+    <ClInclude Include="src\test\performance_test.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="src\command.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utility\FilepathTool.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="README" />
   </ItemGroup>
 </Project>
