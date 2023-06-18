@@ -1,4 +1,4 @@
-# Command Line Tool README
+# Gaussian Elimination Tool README
 
 This command line tool provides functionality for performing Gaussian Elimination operations on matrices, running performance tests, and reading matrices from files.
 
