@@ -53,7 +53,7 @@ This command line tool provides functionality for performing Gaussian Eliminatio
 
 To compile and run this command line tool, you need to have the following dependencies installed:
 
-- C++ compiler that supports C++11 standard
+- C++ compiler that supports C++17 standard
 - Standard Template Library (STL)
 - [ThreadPool](https://github.com/progschj/ThreadPool) library (included in the project)
 
