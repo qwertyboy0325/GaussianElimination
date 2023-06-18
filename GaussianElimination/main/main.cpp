@@ -10,15 +10,17 @@ int main()
 {
 	int num = 0;
 	std::cin >> num;
+	if (num < 2)return 1;
 	while (true) {
 		int row, col = 0;
 
 		std::random_device rd;
 		std::mt19937 gen(rd());
-		std::uniform_int_distribution<int> dis(num*0.8f, num);
+		std::uniform_int_distribution<int> dis(num * 0.8f, num);
 
 		row = dis(gen);
 		col = dis(gen);
+
 		Matrix matrix = MatrixUtility::GenerateRandomMatrix(row, col);
 		//std::cout << "Raw:\n" << matrix << std::endl;
 		size_t threads_num = 0;
