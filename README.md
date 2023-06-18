@@ -14,7 +14,7 @@ To compile and run this command line tool, you need to have the following depend
 To compile the command line tool, follow these steps:
 
 1. Clone the repository: `git clone https://github.com/qwertyboy0325/GaussianElimination.git`
-2. Navigate to the project directory: `cd GaussianElimination`
+2. Navigate to the project directory: `cd GaussianElimination/GaussianElimination`
 3. Compile the source code: `g++ -std=c++17 main.cpp -o command`
 
 ## Usage
