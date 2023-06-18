@@ -63,7 +63,7 @@ To compile the command line tool, follow these steps:
 
 1. Clone the repository: `git clone https://github.com/your-repository.git`
 2. Navigate to the project directory: `cd your-repository`
-3. Compile the source code: `g++ -std=c++11 main.cpp command.cpp -o command`
+3. Compile the source code: `g++ -std=c++17 main.cpp command.cpp -o command`
 
 ## Usage
 
