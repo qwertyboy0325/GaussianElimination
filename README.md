@@ -1,4 +1,4 @@
-# Command Line Tool README
+# Gaussian Elimination Tool README
 
 This command line tool provides functionality for performing Gaussian Elimination operations on matrices, running performance tests, and reading matrices from files.
 
@@ -14,7 +14,7 @@ To compile and run this command line tool, you need to have the following depend
 To compile the command line tool, follow these steps:
 
 1. Clone the repository: `git clone https://github.com/qwertyboy0325/GaussianElimination.git`
-2. Navigate to the project directory: `cd GaussianElimination`
+2. Navigate to the project directory: `cd GaussianElimination/GaussianElimination/src`
 3. Compile the source code: `g++ -std=c++17 main.cpp -o command`
 
 ## Usage
@@ -53,7 +53,7 @@ This command line tool provides functionality for performing Gaussian Eliminatio
 
 To compile and run this command line tool, you need to have the following dependencies installed:
 
-- C++ compiler that supports C++11 standard
+- C++ compiler that supports C++17 standard
 - Standard Template Library (STL)
 - [ThreadPool](https://github.com/progschj/ThreadPool) library (included in the project)
 
@@ -63,7 +63,7 @@ To compile the command line tool, follow these steps:
 
 1. Clone the repository: `git clone https://github.com/your-repository.git`
 2. Navigate to the project directory: `cd your-repository`
-3. Compile the source code: `g++ -std=c++11 main.cpp command.cpp -o command`
+3. Compile the source code: `g++ -std=c++17 main.cpp command.cpp -o command`
 
 ## Usage
 
