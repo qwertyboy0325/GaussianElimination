@@ -31,7 +31,7 @@ class MatrixMath {
 public:
 	void GaussianElimination(Matrix&);
 	float CalculateDeterminant(Matrix&);
-	static void GaussianElimination(Matrix& matrix, int thread_id, Barrier& barrier);
+	static void GaussianElimination(Matrix& ref, size_t current_thread_id , size_t thread_num, Barrier& barrier );
 private:
 
 
