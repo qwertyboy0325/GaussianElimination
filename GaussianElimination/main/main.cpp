@@ -1,4 +1,7 @@
-﻿#include <iostream>
+#define DEBUG_SPEEDTEST
+#define HIDE_MATRIX
+
+#include <iostream>
 #include <thread>
 #include <random>
 #include <chrono>
@@ -20,7 +23,11 @@ int main()
 		row = dis(gen);
 		col = dis(gen);
 		Matrix matrix = MatrixUtility::GenerateRandomMatrix(row, col);
-		//std::cout << "Raw:\n" << matrix << std::endl;
+		
+		#ifndef HIDE_MATRIX
+		std::cout << "Raw:\n" << matrix << std::endl;
+		#endif
+		
 		size_t threads_num = 0;
 		if (matrix.getRows() < 20)
 			threads_num = matrix.getRows();
@@ -36,10 +43,15 @@ int main()
 		}
 		thread_pool.WaitAll();
 		auto end_time = std::chrono::steady_clock::now();
-		//std::cout << "Result:" << std::endl << matrix << std::endl<< std::endl;
 		auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
 		std::cout << "Successed!" << std::endl;
-		//std::cout <<"Result:\n" << matrix << std::endl;
+		
+		#ifndef HIDE_MATRIX
+		std::cout <<"Result:\n" << matrix << std::endl;
+		#endif
+		
+		#ifdef DEBUG_SPEEDTEST
 		std::cout << "ThreadPool execution time: " << duration.count() << " milliseconds" << std::endl;
+		#endif
 	}
 }
