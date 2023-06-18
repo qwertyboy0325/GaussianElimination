@@ -1,7 +1,16 @@
 #pragma once
 #include "ThreadPool.h"
-#include <vector>
+#include "Barrier.h"
 #include <iostream>
+#include <stdexcept>
+#include <thread>
+#include <vector>
+#include <string>
+#include <iomanip>
+#include <sstream>
+#include <random>
+#include <queue>
+#include <fstream>
 
 
 class Matrix {
@@ -41,4 +50,5 @@ class MatrixUtility {
 public:
 	static Matrix GenerateRandomMatrix(size_t rows, size_t cols);
 	static void AvoidPivotZeroRow(Matrix&);
+	static std::queue<Matrix> ReadMatricesFromFile(const std::string& filename);
 };

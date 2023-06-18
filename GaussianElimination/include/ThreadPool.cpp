@@ -1,9 +1,4 @@
 #include "ThreadPool.h"
-#include <thread>
-#include <vector>
-#include <queue>
-#include <mutex>
-#include <condition_variable>
 
 ThreadPool::ThreadPool(size_t numThreads, size_t totalTasks) : stop(false), taskCount(0),
 submittedTasks(0), totalTasks(totalTasks), completedTasks(0) {

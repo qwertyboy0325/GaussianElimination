@@ -1,15 +1,4 @@
 ﻿#include "Matrix.h"
-#include "ThreadPool.h"
-#include "Barrier.h"
-#include <iostream>
-#include <stdexcept>
-#include <thread>
-#include <vector>
-#include <string>
-#include <iomanip>
-#include <sstream>
-#include <random>
-
 
 std::mutex cout_mutex;
 size_t Matrix::getRows() const {
@@ -245,3 +234,29 @@ void MatrixUtility::AvoidPivotZeroRow(Matrix& matrix)
 	}
 }
 
+std::queue<Matrix> MatrixUtility::ReadMatricesFromFile(const std::string& filename) {
+	std::ifstream file(filename);
+	std::queue<Matrix> matrices;
+
+	if (!file.is_open()) {
+		std::cout << "Failed to open file: " << filename << std::endl;
+		return matrices;
+	}
+
+	std::string line;
+	int rows, cols;
+
+	while (std::getline(file, line)) {
+		std::istringstream iss(line);
+		iss >> rows >> cols;
+
+		Matrix matrix(rows, cols);
+		iss >> matrix;
+
+		matrices.push(matrix);
+	}
+
+	file.close();
+
+	return matrices;
+}

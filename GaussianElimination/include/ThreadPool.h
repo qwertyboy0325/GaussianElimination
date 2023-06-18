@@ -1,6 +1,5 @@
 #pragma once
 #include "Barrier.h"
-#include <iostream>
 #include <thread>
 #include <vector>
 #include <queue>

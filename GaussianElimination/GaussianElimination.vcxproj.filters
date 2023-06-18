@@ -30,6 +30,12 @@
     <ClCompile Include="src\test\performance_test.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
+    <ClCompile Include="src\command.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Utility\FilepathTool.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Matrix.h">
@@ -44,5 +50,14 @@
     <ClInclude Include="src\test\performance_test.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
+    <ClInclude Include="src\command.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utility\FilepathTool.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="README" />
   </ItemGroup>
 </Project>
