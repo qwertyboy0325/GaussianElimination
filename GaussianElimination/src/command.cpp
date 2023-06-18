@@ -117,13 +117,8 @@ void TestCommand::execute(int argc, char* argv[]) {
 
 void InputCommand::execute(int argc, char* argv[]) {
 	std::cout << "Enter the following Matrix parameters for Gaussian Elimination:" << std::endl;
-	int row, col;
-	std::cout << "Matrix row size:" << std::endl;
-	std::cin >> row;
-	std::cout << "Matrix col size:" << std::endl;
-	std::cin >> col;
-	Matrix matrix(row, col);
-	std::cout << "Matrix elements" << std::endl;
+	Matrix matrix;
+	std::cout << "Matrix row,col size:" << std::endl;
 	std::cin >> matrix;
 	size_t threads_num = 0;
 	if (matrix.getRows() < 20)
