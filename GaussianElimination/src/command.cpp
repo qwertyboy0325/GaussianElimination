@@ -144,38 +144,40 @@ void ReadCommand::execute(int argc, char* argv[]) {
 		return;
 	}
 
-	std::cout << "Reading paths: ";
+	std::cout << "Reading paths: " << std::endl;
 	std::queue<Matrix> matrixQueue;
 	for (int i = 2; i < argc; ++i) {
-		std::string path = argv[i];
-		if (isValidPath(path)) {
-			std::queue<Matrix> current_queue = MatrixUtility::ReadMatricesFromFile(path);
-			while (!current_queue.empty()) {
-				matrixQueue.push(current_queue.front());
-				current_queue.pop();
-			}
-			while (!matrixQueue.empty()) {
-				Matrix matrix = matrixQueue.front();
-				size_t threads_num = 0;
-				if (matrix.getRows() < 20)
-					threads_num = matrix.getRows();
-				else
-					threads_num = 20;
-				ThreadPool thread_pool(threads_num, threads_num);
-				Barrier barrier(threads_num);
 
-				MatrixUtility::AvoidPivotZeroRow(matrix);
-				for (int i = 0; i < threads_num; i++) {
-					thread_pool.Enqueue([&matrix, &thread_pool, i, threads_num, &barrier] {MatrixMath::GaussianElimination(matrix, i, threads_num, barrier); });
-				}
-				thread_pool.WaitAll();
-				std::cout << "Result:\n" << matrix << std::endl;
-				matrixQueue.pop();
+		std::string path = argv[i];
+		//if (isValidPath(path)) {
+		std::queue<Matrix> current_queue = MatrixUtility::ReadMatricesFromFile(path);
+		while (!current_queue.empty()) {
+			matrixQueue.push(current_queue.front());
+			current_queue.pop();
+		}
+		size_t count = 1;
+		while (!matrixQueue.empty()) {
+			Matrix matrix = matrixQueue.front();
+			size_t threads_num = 0;
+			if (matrix.getRows() < 20)
+				threads_num = matrix.getRows();
+			else
+				threads_num = 20;
+			ThreadPool thread_pool(threads_num, threads_num);
+			Barrier barrier(threads_num);
+
+			MatrixUtility::AvoidPivotZeroRow(matrix);
+			for (int i = 0; i < threads_num; i++) {
+				thread_pool.Enqueue([&matrix, &thread_pool, i, threads_num, &barrier] {MatrixMath::GaussianElimination(matrix, i, threads_num, barrier); });
 			}
+			thread_pool.WaitAll();
+			std::cout << "Result" << ":" << std::endl << matrix << std::endl;
+			matrixQueue.pop();
 		}
-		else {
-			std::cout << "Invalid path: " << path << std::endl;
-		}
+		//}
+		//else {
+		//	std::cout << "Invalid path: " << path << std::endl;
+		//}
 	}
 	std::cout << std::endl;
 }

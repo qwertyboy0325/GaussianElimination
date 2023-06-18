@@ -119,7 +119,7 @@ float MatrixMath::CalculateDeterminant(Matrix& matrix)
 }
 
 
-void MatrixMath::GaussianElimination(Matrix& matrix, size_t thread_id,size_t max_thread_id, Barrier& barrier)
+void MatrixMath::GaussianElimination(Matrix& matrix, size_t thread_id, size_t max_thread_id, Barrier& barrier)
 {
 	const size_t rows = matrix.getRows();
 	const size_t cols = matrix.getCols();
@@ -191,6 +191,23 @@ std::ostream& operator<<(std::ostream& os, const Matrix& matrix) {
 	return os;
 }
 
+std::istringstream& operator>>(std::istringstream& iss, Matrix& matrix)
+{
+	size_t rows, cols;
+	iss >> rows >> cols;
+
+	matrix = Matrix(rows, cols);
+
+	for (size_t i = 0; i < rows; i++) {
+		for (size_t j = 0; j < cols; j++) {
+			iss >> matrix.data_[i][j];
+		}
+	}
+
+	return iss;
+
+}
+
 
 Matrix MatrixUtility::GenerateRandomMatrix(size_t rows, size_t cols) {
 	Matrix matrix(rows, cols);
@@ -243,17 +260,37 @@ std::queue<Matrix> MatrixUtility::ReadMatricesFromFile(const std::string& filena
 		return matrices;
 	}
 
-	std::string line;
-	int rows, cols;
+	std::string content((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+	std::istringstream iss(content);
+	std::vector<int> numbers;
+	int num;
 
-	while (std::getline(file, line)) {
-		std::istringstream iss(line);
-		iss >> rows >> cols;
-
-		Matrix matrix(rows, cols);
-		iss >> matrix;
-
+	while (iss >> num) {
+		numbers.push_back(num);
+	}
+	//std::cout << numbers.size() << std::endl;
+	if (numbers.size() < 2) {
+		std::cout << "Invalid format in file: " << filename << std::endl;
+		return matrices;
+	}
+	int head = 0;
+	while (numbers.size() > head) {
+		int row = numbers[head + 0];
+		int col = numbers[head + 1];
+		if (numbers.size() < head + (row * col) + 2) {
+			std::cout << "Invalid format in file: " << filename << std::endl;
+			return matrices;
+		}
+		Matrix matrix(row, col);
+		for (int i = 0; i < row; i++) {
+			for (int j = 0; j < col; j++) {
+				matrix(i, j) = numbers[((col * i) + j) + 2];
+			}
+		}
 		matrices.push(matrix);
+
+		head += row * col + 2;
+		std::cout << head<<std::endl;
 	}
 
 	file.close();
