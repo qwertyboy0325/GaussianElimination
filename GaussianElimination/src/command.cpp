@@ -30,12 +30,14 @@ void TestCommand::execute(int argc, char* argv[]) {
 			}
 		}
 		else if (suffix == "-r" || suffix == "--random") {
-			if (i + 1 < argc) {
-				std::string s_num, s_matrixScale;
+			if (i + 2 < argc) {
+				s_num = argv[i + 1];
+				s_matrixScale = argv[i + 2];
+
 				num_count = std::stoi(s_num);
 				matrix_scale = std::stoi(s_matrixScale);
+				random = true;
 			}
-			random = true;
 		}
 	}
 
@@ -77,12 +79,12 @@ void TestCommand::execute(int argc, char* argv[]) {
 	}
 	else if (random) {
 		std::cout << "Running Random Matrix Generate to do GaussianElimination" << std::endl;
-		while (true) {
+		for (int i = 0; i < num_count; i++) {
 			int row, col = 0;
 
 			std::random_device rd;
 			std::mt19937 gen(rd());
-			std::uniform_int_distribution<int> dis(num_count * 0.8f, num_count);
+			std::uniform_int_distribution<int> dis(matrix_scale * 0.8f, matrix_scale);
 
 			row = dis(gen);
 			col = dis(gen);
