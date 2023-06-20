@@ -120,6 +120,22 @@ double MatrixMath::CalculateDeterminant(Matrix& matrix)
 
 void MatrixMath::MatrixPivotting(Matrix& matrix, size_t thread_id, size_t max_thread_id, Barrier& barrier)
 {
+	const size_t rows = matrix.getRows();
+	const size_t cols = matrix.getCols();
+
+
+	for (size_t i = 0; i < cols; i++) {
+		double max_factor = 0;
+		if (i < cols && thread_id == i % max_thread_id)
+			for (size_t j = i; j < rows; j++) {
+				if (abs(matrix(j, i)) > max_factor) {
+					max_factor = abs(matrix(j, i));
+					std::swap(matrix(i, i), matrix(j, i));
+				}
+			}
+		barrier.wait();
+	}
+	return;
 }
 
 
@@ -130,7 +146,7 @@ void MatrixMath::GaussianElimination(Matrix& matrix, size_t thread_id, size_t ma
 	const size_t rows = matrix.getRows();
 	const size_t cols = matrix.getCols();
 
-
+	MatrixPivotting(matrix, thread_id, max_thread_id, barrier);
 
 	for (size_t i = 0; i < rows; i++) {
 		// 將對角線元素調整為 1
