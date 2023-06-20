@@ -182,6 +182,21 @@ void ReadCommand::execute(int argc, char* argv[]) {
 	std::cout << std::endl;
 }
 
+//void CalculateCommand::execute(int argc, char* argv[])
+//{
+//	for(int)
+//}
+//
+//void CalculateCommand::printGuide()
+//{
+//	std::cout << "Available action:" << std::endl;
+//	std::cout << "1. def :define Matrix" << std::endl;
+//	std::cout << "2. show_params: show defined matrixs" << std::endl;
+//	std::cout << "3. : Read and process provided paths" << std::endl;
+//	std::cout << "4. help: Display this help message" << std::endl;
+//}
+
+
 void HelpCommand::execute(int argc, char* argv[]) {
 	std::cout << "Available commands:" << std::endl;
 	std::cout << "1. test -p/--performance: Run performance test" << std::endl;
@@ -197,6 +212,7 @@ void HelpCommand::execute(int argc, char* argv[]) {
 CommandHandler::CommandHandler() {
 	commands["test"] = new TestCommand();
 	commands["input"] = new InputCommand();
+	commands["cal"] = new CalculateCommand();
 	commands["i"] = commands["input"];
 	commands["read"] = new ReadCommand();
 	commands["help"] = new HelpCommand();

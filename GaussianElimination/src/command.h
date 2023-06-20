@@ -36,6 +36,12 @@ public:
 	void execute(int argc, char* argv[]) override;
 };
 
+class CalculateCommand : public TaskCommand {
+public:
+	void execute(int argc, char* argv[]) override;
+	void printGuide();
+};
+
 class CommandHandler {
 private:
 	std::unordered_map<std::string, TaskCommand*> commands;
