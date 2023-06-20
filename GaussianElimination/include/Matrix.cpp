@@ -16,6 +16,31 @@ double& Matrix::operator()(size_t row, size_t column) {
 	return data_[row][column];
 }
 
+Matrix Matrix::operator*(const Matrix& other) const
+{
+	if (cols_ != other.rows_) {
+		throw std::runtime_error("Matrix dimensions mismatch");
+	}
+
+	Matrix result(rows_, other.cols_);
+	for (size_t i = 0; i < rows_; i++) {
+		for (size_t j = 0; j < other.cols_; j++) {
+			double sum = 0.0;
+			for (size_t k = 0; k < cols_; k++) {
+				sum += data_[i][k] * other.data_[k][j];
+			}
+			result.data_[i][j] = sum;
+		}
+	}
+
+	return result;
+}
+
+bool Matrix::isSquare()
+{
+	return cols_ == rows_;
+}
+
 Matrix::Matrix(size_t rows, size_t cols) :rows_(rows), cols_(cols), data_(rows, std::vector<double>(cols, 0.0f)) {}
 
 Matrix::Matrix() : rows_(0), cols_(0), data_() {}
@@ -118,6 +143,20 @@ double MatrixMath::CalculateDeterminant(Matrix& matrix)
 	}
 }
 
+double MatrixMath::CaculateDeterminant(Matrix& L, Matrix& U)
+{
+	if (!(L.isSquare() || U.isSquare()))
+		throw("CaculateDeterminant param:(L, U) must square");
+
+	int n = L.getRows();
+	double determinant = 1.0;
+	for (int i = 0; i < n; ++i) {
+		determinant *= L(i, i) * U(i, i);
+	}
+
+	return determinant;
+}
+
 void MatrixMath::MatrixPivotting(Matrix& matrix, size_t thread_id, size_t max_thread_id, Barrier& barrier)
 {
 	const size_t rows = matrix.getRows();
@@ -178,6 +217,66 @@ void MatrixMath::GaussianElimination(Matrix& matrix, size_t thread_id, size_t ma
 		barrier.wait();
 	}
 	return;
+}
+
+// This func still doesn't accept non-square matrices as parameters. 
+// In the future, Extended LU Decomposition will be adopted as the new operational approach for handling such cases.
+void MatrixMath::GaussianEliminationLU(Matrix& A, Matrix& L, Matrix& U, size_t thread_id, size_t max_thread_id, Barrier& barrier)
+{
+	if (!A.isSquare() || !L.isSquare() || !U.isSquare())throw("Func GaussianEliminationLU param:A, L, U must be square.");
+	const size_t rows = A.getRows();
+	const size_t cols = A.getCols();
+
+	MatrixPivotting(A, thread_id, max_thread_id, barrier);
+
+	for (size_t i = 0; i < rows; i++) {
+		// 將對角線元素調整為 1
+		if (i < cols) {
+			if (thread_id == i % max_thread_id) {
+				double factor = A(i, i);
+				if (factor != 0) {
+					for (size_t j = i; j < cols; j++)
+						A(i, j) /= factor;
+				}
+			}
+		}
+
+		// 等待所有線程完成當前階段的操作
+		barrier.wait();
+
+		// 進行消去操作
+		for (size_t j = 0; j < rows; j++) {
+			if (thread_id == j % max_thread_id && j != i && i < cols) {
+				double factor = A(j, i);
+				for (size_t k = i; k < cols; k++)
+				{
+					A(j, k) -= factor * A(i, k);
+					L(j, k) -= factor * L(i, k);
+				}
+				L(j, i) = factor;
+			}
+		}
+
+		// 等待所有線程完成當前階段的操作
+		barrier.wait();
+	}
+	U = A;
+	return;
+}
+
+Matrix* MatrixMath::Transpose(Matrix& ref, size_t current_thread_id, size_t max_thread_id, Barrier& barrier)
+{
+	size_t rows = ref.getRows();
+	size_t cols = ref.getCols();
+	Matrix* result = new Matrix(rows, cols);
+
+	for (size_t i = 0; i < rows; i++) {
+		for (size_t j = 0; j < cols; j++) {
+			(*result)(j, i) = ref(i, j);
+		}
+	}
+
+	return result;
 }
 
 
@@ -321,4 +420,13 @@ std::queue<Matrix> MatrixUtility::ReadMatricesFromFile(const std::string& filena
 	file.close();
 
 	return matrices;
+}
+
+Matrix MatrixUtility::GetIdentityMatrix(size_t scale)
+{
+	Matrix matrix(scale, scale);
+	for (int i = 0; i < scale; i++) {
+		matrix(i, i) = 0;
+	}
+	return;
 }
