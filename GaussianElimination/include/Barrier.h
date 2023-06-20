@@ -5,7 +5,7 @@
 
 class Barrier {
 public:
-    explicit Barrier(int);
+    explicit Barrier(size_t);
 
     void wait();
 

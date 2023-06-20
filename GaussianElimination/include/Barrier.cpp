@@ -1,6 +1,6 @@
 ﻿#include "Barrier.h"
 
-Barrier::Barrier(int numThreads) : numThreads(numThreads), count(0),phase(0) {}
+Barrier::Barrier(size_t numThreads) : numThreads(numThreads), count(0),phase(0) {}
 
 void Barrier::wait() {
     std::unique_lock<std::mutex> lock(mutex);
