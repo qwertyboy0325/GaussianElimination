@@ -12,11 +12,11 @@ size_t Matrix::getElementWidth(size_t row, size_t column) const {
 	return std::to_string(data_[row][column]).length();
 }
 
-float& Matrix::operator()(size_t row, size_t column) {
+double& Matrix::operator()(size_t row, size_t column) {
 	return data_[row][column];
 }
 
-Matrix::Matrix(size_t rows, size_t cols) :rows_(rows), cols_(cols), data_(rows, std::vector<float>(cols, 0.0f)) {}
+Matrix::Matrix(size_t rows, size_t cols) :rows_(rows), cols_(cols), data_(rows, std::vector<double>(cols, 0.0f)) {}
 
 Matrix::Matrix() : rows_(0), cols_(0), data_() {}
 
@@ -50,7 +50,7 @@ Matrix& Matrix::operator=(const Matrix& other) {
 	// 深度複製 other 的內容到目前的物件
 	rows_ = other.rows_;
 	cols_ = other.cols_;
-	data_ = std::vector<std::vector<float>>(rows_, std::vector<float>(cols_, 0.0f));
+	data_ = std::vector<std::vector<double>>(rows_, std::vector<double>(cols_, 0.0f));
 	for (size_t i = 0; i < rows_; i++) {
 		for (size_t j = 0; j < cols_; j++) {
 			data_[i][j] = other.data_[i][j];
@@ -70,12 +70,12 @@ public:
 	}
 protected:
 
-	float determinant = 0.0f;
+	double determinant = 0.0f;
 	std::mutex mutex;
 };
 
 
-float MatrixMath::CalculateDeterminant(Matrix& matrix)
+double MatrixMath::CalculateDeterminant(Matrix& matrix)
 {
 	if (matrix.getCols() != matrix.getRows()) {
 		throw std::invalid_argument("From CaculateDeterminant(Matrix): Matrix must be square.");
@@ -85,7 +85,7 @@ float MatrixMath::CalculateDeterminant(Matrix& matrix)
 	if (n == 1)
 		return matrix(0, 0);
 	else {
-		float determinant = 0.0f;
+		double determinant = 0.0f;
 
 		ThreadPool threadPool(n, n);
 		std::vector<SubMatrixResult> subMatrixResults(n);
@@ -102,7 +102,7 @@ float MatrixMath::CalculateDeterminant(Matrix& matrix)
 			}
 			// 將子矩陣的計算任務提交到 ThreadPool 中
 			threadPool.Enqueue([this, &subMatrix, i, &subMatrixResults]() {
-				float subDeterminant = CalculateDeterminant(subMatrix);
+				double subDeterminant = CalculateDeterminant(subMatrix);
 				std::lock_guard<std::mutex> lock(subMatrixResults[i].mutex);
 				subMatrixResults[i].determinant = subDeterminant;
 				});
@@ -118,11 +118,19 @@ float MatrixMath::CalculateDeterminant(Matrix& matrix)
 	}
 }
 
+void MatrixMath::MatrixPivotting(Matrix& matrix, size_t thread_id, size_t max_thread_id, Barrier& barrier)
+{
+}
+
+
+
 
 void MatrixMath::GaussianElimination(Matrix& matrix, size_t thread_id, size_t max_thread_id, Barrier& barrier)
 {
 	const size_t rows = matrix.getRows();
 	const size_t cols = matrix.getCols();
+
+
 
 	for (size_t i = 0; i < rows; i++) {
 		// 將對角線元素調整為 1
@@ -262,8 +270,8 @@ std::queue<Matrix> MatrixUtility::ReadMatricesFromFile(const std::string& filena
 
 	std::string content((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
 	std::istringstream iss(content);
-	std::vector<int> numbers;
-	int num;
+	std::vector<double> numbers;
+	double num;
 
 	while (iss >> num) {
 		numbers.push_back(num);
@@ -273,12 +281,13 @@ std::queue<Matrix> MatrixUtility::ReadMatricesFromFile(const std::string& filena
 		std::cout << "Invalid format in file: " << filename << std::endl;
 		return matrices;
 	}
-	int head = 0;
+	size_t head = 0;
 	while (numbers.size() > head) {
-		int row = numbers[head + 0];
-		int col = numbers[head + 1];
+		size_t row = (size_t)numbers[head + 0];
+		size_t col = (size_t)numbers[head + 1];
 		if (numbers.size() < head + (row * col) + 2) {
-			std::cout << "Invalid format in file: " << filename << std::endl;
+			std::cout << numbers.size() << std::endl << col << std::endl;
+			std::cout << "Invalid format in fi le: " << filename << std::endl;
 			return matrices;
 		}
 		Matrix matrix(row, col);
@@ -290,7 +299,7 @@ std::queue<Matrix> MatrixUtility::ReadMatricesFromFile(const std::string& filena
 		matrices.push(matrix);
 
 		head += row * col + 2;
-		std::cout << head<<std::endl;
+		std::cout << head << std::endl;
 	}
 
 	file.close();
