@@ -27,6 +27,7 @@ public:
 	size_t getElementWidth(size_t , size_t ) const;
 	friend std::istream& operator>>(std::istream& is, Matrix& matrix);
 	friend std::ostream& operator<<(std::ostream& os, const Matrix& matrix);
+	friend std::istringstream& operator>>(std::istringstream& iss, Matrix& matrix);
 private:
 	size_t rows_;
 	size_t cols_;
@@ -35,6 +36,7 @@ private:
 
 std::istream& operator>>(std::istream& is, Matrix& matrix);
 std::ostream& operator<<(std::ostream& os, const Matrix& matrix);
+std::istringstream& operator>>(std::istringstream& iss, Matrix& matrix);
 
 class MatrixMath {
 public:
