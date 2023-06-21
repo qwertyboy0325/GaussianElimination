@@ -36,11 +36,11 @@ public:
 	void execute(int argc, char* argv[]) override;
 };
 
-class CalculateCommand : public TaskCommand {
-public:
-	void execute(int argc, char* argv[]) override;
-	void printGuide();
-};
+//class CalculateCommand : public TaskCommand {
+//public:
+//	void execute(int argc, char* argv[]) override;
+//	void printGuide();
+//};
 
 class CommandHandler {
 private:
