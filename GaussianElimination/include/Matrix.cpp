@@ -428,5 +428,5 @@ Matrix MatrixUtility::GetIdentityMatrix(size_t scale)
 	for (int i = 0; i < scale; i++) {
 		matrix(i, i) = 0;
 	}
-	return;
+	return matrix;
 }
