@@ -4,6 +4,9 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include <sstream>
+#include <string>
+#include <map>
 #include "../include/ThreadPool.h"
 #include "../include/Matrix.h"
 #include "../include/Barrier.h"
@@ -38,6 +41,8 @@ public:
 
 //class CalculateCommand : public TaskCommand {
 //public:
+//	std::map<std::string, Matrix> matrices;
+//	std::map<std::string, std::string> action;
 //	void execute(int argc, char* argv[]) override;
 //	void printGuide();
 //};

@@ -92,19 +92,21 @@ void TestCommand::execute(int argc, char* argv[]) {
 
 			std::cout << "Raw:\n" << matrix << std::endl;
 
-			size_t threads_num = 0;
-			if (matrix.getRows() < 20)
-				threads_num = matrix.getRows();
-			else
-				threads_num = 20;
+			size_t threads_num = 1;
+			//if (matrix.getRows() < 20)
+			//	threads_num = matrix.getRows();
+			//else
+			//	threads_num = 20;
 			ThreadPool thread_pool(threads_num, threads_num);
 			Barrier barrier(threads_num);
 
 			auto start_time = std::chrono::steady_clock::now();
 			MatrixUtility::AvoidPivotZeroRow(matrix);
-			for (int i = 0; i < threads_num; i++) {
-				thread_pool.Enqueue([&matrix, &thread_pool, i, threads_num, &barrier] {MatrixMath::GaussianElimination(matrix, i, threads_num, barrier); });
-			}
+
+			MatrixMath::GaussianElimination(matrix, i, threads_num, barrier);
+			//for (int i = 0; i < threads_num; i++) {
+			//	thread_pool.Enqueue([&matrix, &thread_pool, i, threads_num, &barrier] {MatrixMath::GaussianElimination(matrix, i, threads_num, barrier); });
+			//}
 			thread_pool.WaitAll();
 			auto end_time = std::chrono::steady_clock::now();
 			auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
@@ -122,11 +124,11 @@ void InputCommand::execute(int argc, char* argv[]) {
 	Matrix matrix;
 	std::cout << "Matrix row,col size:" << std::endl;
 	std::cin >> matrix;
-	size_t threads_num = 0;
-	if (matrix.getRows() < 20)
-		threads_num = matrix.getRows();
-	else
-		threads_num = 20;
+	size_t threads_num = 1;
+	//if (matrix.getRows() < 20)
+	//	threads_num = matrix.getRows();
+	//else
+	//	threads_num = 20;
 	ThreadPool thread_pool(threads_num, threads_num);
 	Barrier barrier(threads_num);
 
@@ -134,6 +136,10 @@ void InputCommand::execute(int argc, char* argv[]) {
 	for (int i = 0; i < threads_num; i++) {
 		thread_pool.Enqueue([&matrix, &thread_pool, i, threads_num, &barrier] {MatrixMath::GaussianElimination(matrix, i, threads_num, barrier); });
 	}
+
+	//for (int i = 0; i < threads_num; i++) {
+	//	thread_pool.Enqueue([&matrix, &thread_pool, i, threads_num, &barrier] {MatrixMath::GaussianEliminationLU(matrix, i, threads_num, barrier); });
+	//}
 	thread_pool.WaitAll();
 	std::cout << "Result:\n" << matrix << std::endl;
 }
@@ -158,11 +164,11 @@ void ReadCommand::execute(int argc, char* argv[]) {
 		size_t count = 1;
 		while (!matrixQueue.empty()) {
 			Matrix matrix = matrixQueue.front();
-			size_t threads_num = 0;
-			if (matrix.getRows() < 20)
-				threads_num = matrix.getRows();
-			else
-				threads_num = 20;
+			size_t threads_num = 1;
+			//if (matrix.getRows() < 20)
+			//	threads_num = matrix.getRows();
+			//else
+			//	threads_num = 20;
 			ThreadPool thread_pool(threads_num, threads_num);
 			Barrier barrier(threads_num);
 
@@ -184,9 +190,45 @@ void ReadCommand::execute(int argc, char* argv[]) {
 
 //void CalculateCommand::execute(int argc, char* argv[])
 //{
-//	for(int)
-//}
+//	std::cout << "Please enter the equation you want to solve." << std::endl;
+//	std::cout << "Enter 'help' to get the guide of the equation." << std::endl;
+//	while (true) {
+//		std::cout << ": ";
+//		std::string inputLine;
+//		std::getline(std::cin, inputLine);
+//		std::istringstream iss(inputLine);
 //
+//		std::queue<std::string> params;
+//
+//		std::string param;
+//		while (iss >> param) {
+//			params.push(param);
+//		}
+//		if (params.front() == "exit") {
+//			break; // 使用者輸入 "exit"，結束迴圈
+//		}
+//		if (params.front() == "def") {
+//			Matrix matrix;
+//			params.pop();
+//			while (params.size() > 0) {
+//				std::cout << "Please def the matrix of " + params.front() << std::endl;
+//				std::cin >> matrix;
+//				matrices[params.front()];
+//				params.pop();
+//			}
+//		}
+//		else if (params.front() == "show_attrs") {
+//			for (auto& pair : matrices) {
+//				const std::string& name = pair.first;
+//				const Matrix& matrix = pair.second;
+//
+//				std::cout << name << "=" << std::endl;
+//				std::cout << matrix << std::endl;
+//			}
+//		}
+//	}
+//}
+
 //void CalculateCommand::printGuide()
 //{
 //	std::cout << "Available action:" << std::endl;
@@ -212,7 +254,7 @@ void HelpCommand::execute(int argc, char* argv[]) {
 CommandHandler::CommandHandler() {
 	commands["test"] = new TestCommand();
 	commands["input"] = new InputCommand();
-	commands["cal"] = new CalculateCommand();
+	//commands["cal"] = new CalculateCommand();
 	commands["i"] = commands["input"];
 	commands["read"] = new ReadCommand();
 	commands["help"] = new HelpCommand();

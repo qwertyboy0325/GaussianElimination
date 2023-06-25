@@ -1,4 +1,5 @@
 #pragma once
+#define EPSILON_DOUBLE 1.0e-14
 #include "ThreadPool.h"
 #include "Barrier.h"
 #include <iostream>
@@ -7,11 +8,14 @@
 #include <vector>
 #include <string>
 #include <iomanip>
+#include <cmath>
 #include <sstream>
 #include <random>
 #include <queue>
 #include <fstream>
+#include <mutex>
 
+extern std::mutex cout_mutex;
 
 class Matrix {
 
@@ -45,7 +49,7 @@ public:
 	void GaussianElimination(Matrix&);
 	double CalculateDeterminant(Matrix& ref); //cofactor expansion
 	double CaculateDeterminant(Matrix& L, Matrix& U);
-	static void MatrixPivotting(Matrix& ref, size_t current_thread_id, size_t max_thread_id, Barrier& barrier);
+	static void MatrixPivotting(Matrix& ref, size_t started_row, size_t current_thread_id, size_t max_thread_id, Barrier& barrier);
 	static void GaussianElimination(Matrix& ref, size_t current_thread_id, size_t max_thread_id, Barrier& barrier);
 	static void GaussianEliminationLU(Matrix& A, Matrix& L, Matrix& U, size_t current_thread_id, size_t max_thread_id, Barrier& barrier);
 	Matrix* Transpose(Matrix& ref, size_t current_thread_id, size_t max_thread_id, Barrier& barrier);

@@ -157,64 +157,65 @@ double MatrixMath::CaculateDeterminant(Matrix& L, Matrix& U)
 	return determinant;
 }
 
-void MatrixMath::MatrixPivotting(Matrix& matrix, size_t thread_id, size_t max_thread_id, Barrier& barrier)
+void MatrixMath::MatrixPivotting(Matrix& matrix, size_t started_row, size_t thread_id, size_t max_thread_id, Barrier& barrier)
 {
 	const size_t rows = matrix.getRows();
 	const size_t cols = matrix.getCols();
-
-
-	for (size_t i = 0; i < cols; i++) {
-		double max_factor = 0;
-		if (i < cols && thread_id == i % max_thread_id)
-			for (size_t j = i; j < rows; j++) {
-				if (abs(matrix(j, i)) > max_factor) {
-					max_factor = abs(matrix(j, i));
-					std::swap(matrix(i, i), matrix(j, i));
-				}
-			}
-		barrier.wait();
+	size_t max_index = 0;
+	double max_value = 0;
+	for (size_t i = started_row; i < rows; i++) {
+		if (abs(matrix(i, started_row)) > max_value) {
+			max_index = i;
+			max_value = abs(matrix(i, started_row));
+		}
 	}
+
+	std::cout << "max index= " << max_index << "\nmax value= " << max_value << std::endl;
+	std::cout << started_row << std::endl;
+	for (size_t i = started_row; i < cols; i++) {
+		std::swap(matrix(started_row, i), matrix(max_index, i));
+	}
+	std::cout << started_row << " :\n" << matrix << std::endl;
 	return;
 }
 
-
-
-
 void MatrixMath::GaussianElimination(Matrix& matrix, size_t thread_id, size_t max_thread_id, Barrier& barrier)
 {
+
+	std::cout << matrix(1, 2) << std::endl;
 	const size_t rows = matrix.getRows();
 	const size_t cols = matrix.getCols();
 
-	MatrixPivotting(matrix, thread_id, max_thread_id, barrier);
-
-	for (size_t i = 0; i < rows; i++) {
-		// 將對角線元素調整為 1
-		if (i < cols) {
-			if (thread_id == i % max_thread_id) {
-				double factor = matrix(i, i);
-				if (factor != 0) {
-					for (size_t j = i; j < cols; j++)
-						matrix(i, j) /= factor;
-				}
-			}
-		}
-
-		// 等待所有線程完成當前階段的操作
-		barrier.wait();
-
-		// 進行消去操作
-		for (size_t j = 0; j < rows; j++) {
-			if (thread_id == j % max_thread_id && j != i && i < cols) {
-				double factor = matrix(j, i);
+	for (size_t i = 0; i < rows; i++)
+	{
+		MatrixPivotting(matrix, i, thread_id, max_thread_id, barrier);
+		for (size_t j = 0; j < rows; j++)
+		{
+			if (j != i && i < rows)
+			{
+				double mtp = matrix(j, i) / matrix(i, i);
 				for (size_t k = i; k < cols; k++)
 				{
-					matrix(j, k) -= factor * matrix(i, k);
+					matrix(j, k) -= matrix(i, k) * mtp;
+					if (abs(matrix(j, k)) <= EPSILON_DOUBLE)
+						matrix(j, k) = 0;
 				}
 			}
 		}
+	}
 
-		// 等待所有線程完成當前階段的操作
-		barrier.wait();
+	for (size_t i = 0; i < rows; i++)
+	{
+		double divisor = matrix(i, i);
+		if (divisor != 0)
+		{
+			for (size_t j = 0; j < cols; j++)
+			{
+				matrix(i, j) /= divisor;
+				if (abs(matrix(i, j)) <= EPSILON_DOUBLE)
+					matrix(i, j) = 0;
+			}
+		}
 	}
 	return;
 }
@@ -227,23 +228,9 @@ void MatrixMath::GaussianEliminationLU(Matrix& A, Matrix& L, Matrix& U, size_t t
 	const size_t rows = A.getRows();
 	const size_t cols = A.getCols();
 
-	MatrixPivotting(A, thread_id, max_thread_id, barrier);
 
 	for (size_t i = 0; i < rows; i++) {
-		// 將對角線元素調整為 1
-		if (i < cols) {
-			if (thread_id == i % max_thread_id) {
-				double factor = A(i, i);
-				if (factor != 0) {
-					for (size_t j = i; j < cols; j++)
-						A(i, j) /= factor;
-				}
-			}
-		}
-
-		// 等待所有線程完成當前階段的操作
-		barrier.wait();
-
+		MatrixPivotting(A, i, thread_id, max_thread_id, barrier);
 		// 進行消去操作
 		for (size_t j = 0; j < rows; j++) {
 			if (thread_id == j % max_thread_id && j != i && i < cols) {
