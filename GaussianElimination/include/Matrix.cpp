@@ -161,7 +161,7 @@ void MatrixMath::MatrixPivotting(Matrix& matrix, size_t started_row, size_t thre
 {
 	const size_t rows = matrix.getRows();
 	const size_t cols = matrix.getCols();
-	size_t max_index = 0;
+	size_t max_index = rows;
 	double max_value = 0;
 	for (size_t i = started_row; i < rows; i++) {
 		if (abs(matrix(i, started_row)) > max_value) {
@@ -170,12 +170,15 @@ void MatrixMath::MatrixPivotting(Matrix& matrix, size_t started_row, size_t thre
 		}
 	}
 
-	std::cout << "max index= " << max_index << "\nmax value= " << max_value << std::endl;
-	std::cout << started_row << std::endl;
-	for (size_t i = started_row; i < cols; i++) {
-		std::swap(matrix(started_row, i), matrix(max_index, i));
+	//std::cout << "max index= " << max_index << "\nmax value= " << max_value << std::endl;
+	//std::cout << started_row << std::endl;
+	if (max_index < rows)
+	{
+		for (size_t i = 0; i < cols; i++) {
+			std::swap(matrix(started_row, i), matrix(max_index, i));
+		}
 	}
-	std::cout << started_row << " :\n" << matrix << std::endl;
+	//std::cout << started_row << " :\n" << matrix << std::endl;
 	return;
 }
 
@@ -193,10 +196,18 @@ void MatrixMath::GaussianElimination(Matrix& matrix, size_t thread_id, size_t ma
 		{
 			if (j != i && i < rows)
 			{
-				double mtp = matrix(j, i) / matrix(i, i);
+				double a = matrix(j, i);
+				double b = matrix(i, i);
+				short mtp_sign = (matrix(j, i) >= 0 && matrix(i, i) >= 0) || (matrix(j, i) < 0 && matrix(i, i) < 0) ? 1 : -1;
+				double mtp = mtp_sign * exp(log(abs(a)) - log(abs(b)));
+				//double mtp = matrix(j, i) / matrix(i, i);
 				for (size_t k = i; k < cols; k++)
 				{
-					matrix(j, k) -= matrix(i, k) * mtp;
+					double a = std::max(matrix(i, k), mtp);
+					double b = std::min(matrix(i, k), mtp);
+					short sign = (a >= 0 && b >= 0) || (a < 0 && b < 0) ? 1 : -1;
+					matrix(j, k) -= sign * (exp(log(abs(a)) + log(abs(b))));
+					//matrix(j, k) -= matrix(i, k) * mtp;
 					if (abs(matrix(j, k)) <= EPSILON_DOUBLE)
 						matrix(j, k) = 0;
 				}
@@ -211,7 +222,8 @@ void MatrixMath::GaussianElimination(Matrix& matrix, size_t thread_id, size_t ma
 		{
 			for (size_t j = 0; j < cols; j++)
 			{
-				matrix(i, j) /= divisor;
+				short sign = (matrix(i, j) >= 0 && divisor >= 0) || (matrix(i, j) < 0 && divisor < 0) ? 1 : -1;
+				matrix(i, j) = sign *(exp(log(abs(matrix(i, j)))-log(abs(divisor)))) ;
 				if (abs(matrix(i, j)) <= EPSILON_DOUBLE)
 					matrix(i, j) = 0;
 			}
@@ -323,7 +335,7 @@ Matrix MatrixUtility::GenerateRandomMatrix(size_t rows, size_t cols) {
 	Matrix matrix(rows, cols);
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	std::uniform_int_distribution<int> dis(-50, 50);
+	std::uniform_real<double> dis(-0.001,0.001);
 
 	for (size_t i = 0; i < rows; i++) {
 		for (size_t j = 0; j < cols; j++) {
@@ -385,17 +397,18 @@ std::queue<Matrix> MatrixUtility::ReadMatricesFromFile(const std::string& filena
 	}
 	size_t head = 0;
 	while (numbers.size() > head) {
+		std::cout<<head << " " << numbers.size() <<std::endl;
 		size_t row = (size_t)numbers[head + 0];
 		size_t col = (size_t)numbers[head + 1];
 		if (numbers.size() < head + (row * col) + 2) {
-			std::cout << numbers.size() << std::endl << col << std::endl;
+			std::cout << head + (row * col) + 2  << std::endl;
 			std::cout << "Invalid format in fi le: " << filename << std::endl;
 			return matrices;
 		}
 		Matrix matrix(row, col);
 		for (int i = 0; i < row; i++) {
 			for (int j = 0; j < col; j++) {
-				matrix(i, j) = numbers[((col * i) + j) + 2];
+				matrix(i, j) = numbers[head+((col * i) + j) + 2];
 			}
 		}
 		matrices.push(matrix);

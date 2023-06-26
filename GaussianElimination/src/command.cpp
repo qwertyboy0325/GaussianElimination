@@ -107,10 +107,11 @@ void TestCommand::execute(int argc, char* argv[]) {
 			//for (int i = 0; i < threads_num; i++) {
 			//	thread_pool.Enqueue([&matrix, &thread_pool, i, threads_num, &barrier] {MatrixMath::GaussianElimination(matrix, i, threads_num, barrier); });
 			//}
-			thread_pool.WaitAll();
+			//thread_pool.WaitAll();
 			auto end_time = std::chrono::steady_clock::now();
 			auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
 			std::cout << "Successed!" << std::endl;
+			std::setprecision(15);
 			std::cout << "Result:\n" << matrix << std::endl;
 		}
 	}
@@ -165,6 +166,7 @@ void ReadCommand::execute(int argc, char* argv[]) {
 		while (!matrixQueue.empty()) {
 			Matrix matrix = matrixQueue.front();
 			size_t threads_num = 1;
+			std::cout << "Raw" << ":" << std::endl << matrix << std::endl;
 			//if (matrix.getRows() < 20)
 			//	threads_num = matrix.getRows();
 			//else
@@ -173,10 +175,12 @@ void ReadCommand::execute(int argc, char* argv[]) {
 			Barrier barrier(threads_num);
 
 			MatrixUtility::AvoidPivotZeroRow(matrix);
-			for (int i = 0; i < threads_num; i++) {
-				thread_pool.Enqueue([&matrix, &thread_pool, i, threads_num, &barrier] {MatrixMath::GaussianElimination(matrix, i, threads_num, barrier); });
-			}
-			thread_pool.WaitAll();
+			//for (int i = 0; i < threads_num; i++) {
+			//	thread_pool.Enqueue([&matrix, &thread_pool, i, threads_num, &barrier] {MatrixMath::GaussianElimination(matrix, i, threads_num, barrier); });
+			//}
+			//thread_pool.WaitAll();
+			MatrixMath::GaussianElimination(matrix, i, threads_num, barrier);
+			std::cout.precision(15);
 			std::cout << "Result" << ":" << std::endl << matrix << std::endl;
 			matrixQueue.pop();
 		}

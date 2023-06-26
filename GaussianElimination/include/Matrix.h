@@ -3,8 +3,10 @@
 #include "ThreadPool.h"
 #include "Barrier.h"
 #include <iostream>
+#include <iomanip>
 #include <stdexcept>
 #include <thread>
+#include <algorithm>
 #include <vector>
 #include <string>
 #include <iomanip>
