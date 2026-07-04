@@ -1,5 +1,8 @@
 # Gaussian Elimination Tool README
 
+> **Context:** An academic project from my undergraduate studies, built for a course. Kept public as a record of early C++ work — C++17, multithreading, and performance benchmarking.
+
+
 This command line tool provides functionality for performing Gaussian Elimination operations on matrices, running performance tests, and reading matrices from files.
 
 ## Prerequisites
